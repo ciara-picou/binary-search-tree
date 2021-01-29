@@ -7,51 +7,37 @@ class Node {
 }
 
 class BinarySearchTree {
-  constructor(value) {
+  constructor() {
     this.root = null;
   }
-
   insert(value) {
-    const newNode = new Node(value);
+    var newNode = new Node(value);
     if (this.root === null) {
       this.root = newNode;
-      console.log(this);
       return this;
-    } else {
-      let current = this.root;
-      if (value === current.value) {
-        console.log(undefined);
-        return undefined;
-      }
-      while (value < current.value) {
-        if (!current.left) {
+    }
+    var current = this.root;
+    while (true) {
+      if (value === current.value) return undefined;
+      if (value < current.value) {
+        if (current.left === null) {
           current.left = newNode;
-          console.log(this);
           return this;
-        } else {
-          current = current.left;
         }
-      }
-      while (value > current.value) {
-        if (!current.right) {
+        current = current.left;
+      } else {
+        if (current.right === null) {
           current.right = newNode;
-          console.log(this);
           return this;
-        } else {
-          current = current.right;
         }
+        current = current.right;
       }
     }
   }
-
   find(value) {
-    if (this.root === null) {
-      console.log(false);
-      return false;
-    }
-    let current = this.root;
-    let found = false;
-
+    if (this.root === null) return false;
+    var current = this.root,
+      found = false;
     while (current && !found) {
       if (value < current.value) {
         current = current.left;
@@ -59,18 +45,50 @@ class BinarySearchTree {
         current = current.right;
       } else {
         found = true;
-        console.log(found);
       }
     }
-    if (!found) {
-      console.log(undefined);
-      return undefined;
-    }
-    console.log(current);
-
+    if (!found) return undefined;
     return current;
   }
+  contains(value) {
+    if (this.root === null) return false;
+    var current = this.root,
+      found = false;
+    while (current && !found) {
+      if (value < current.value) {
+        current = current.left;
+      } else if (value > current.value) {
+        current = current.right;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+  BFS() {
+    var node = this.root,
+      data = [],
+      queue = [];
+    queue.push(node);
+
+    while (queue.length) {
+      node = queue.shift();
+      data.push(node.value);
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
+    return data;
+  }
 }
+
+var tree = new BinarySearchTree();
+tree.insert(10);
+tree.insert(6);
+tree.insert(15);
+tree.insert(3);
+tree.insert(8);
+tree.insert(20);
+tree.BFS();
 
 var myBST = new BinarySearchTree();
 myBST.insert(10);
